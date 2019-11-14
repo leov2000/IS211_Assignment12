@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Oxygen&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css')}}?bust={{cache_bust}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css')}}?bust={{cache_bust}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}?bust={{cache_bust}}">
+</head>
+<body>
+
+    <div class="sign-up-page">
+        <div class="nav-bar">
+            <div class="nav-heading">
+                <span>University Grade Submission</span>
+            </div>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="error-messages">
+                        {% for message in messages %}
+                            <div class="error-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+            <div class="sign-up-container">
+                <form class="sign-up-form" action="{{ url_for('home') }}" method="POST">
+                    <h3 class="admin-header">Admin Login</h3>
+                    <div class="input-container">
+                        <div class="form-input username-input">
+                            <span>username:</span>
+                            <input type="password" name="username" required>
+                        </div>
+                        <div class="form-input">
+                            <span>password:</span>
+                            <input type="password" name="password" required>
+                        </div>
+                    </div>
+                    <button class='submit-button'>Sign On</button>
+                </form>
+            </div>
+    </div>
+</body>
+</html>
