@@ -1,12 +1,34 @@
-from flask import Flask
+from flask import Flask, flash, redirect, render_template, request, session, abort, render_template_string
+import random
+from utilities import get_credentials
+
+app = Flask(__name__)
+keys = get_credentials()
+app.secret_key = keys['secret_key']
 
 @app.route('/login')
-def login():
-    """"
-    if login correct:
-    return dashboard 
-    else return login with error
-    """
+def home():
+    if not session.get('logged_in'):
+        return render_template('login.html', cache_bust=random.random())
+    else:
+        return render_template_string("Hi")
+
+@app.route('/login', methods=['POST'])
+def admin_login():
+
+    if request.form['password'] == keys['password'] and keys['username'] == 'admin':
+        session['logged_in'] = True
+    else:
+        flash('wrong password!')
+
+    return home()
+
+@app.route("/logout")
+def logout():
+    session['logged_in'] = False
+    session.pop('_flashes', None)
+
+    return home()
 
 @app.route('/dashboard')
 def dashboard():
@@ -60,3 +82,6 @@ def add_quiz_result():
 #     Allow a non­logged in user to see quiz results but only in a anonymized way
 #     (i.e. show a student ID instead of the user name)
 #     """
+
+if __name__ == '__main__':
+    app.run()
