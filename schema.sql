@@ -1,20 +1,20 @@
--- Check and see if the artists table already exists, if it does, drop it
+-- Check and see if the students table already exists, if it does, drop it
 DROP TABLE IF EXISTS students;
 
--- Check and see if the albums table already exists, if it does, drop it
+-- Check and see if the quizes table already exists, if it does, drop it
 DROP TABLE IF EXISTS quizes;
 
--- Check and see if the songs table already exists, if it does, drop it
+-- Check and see if the results table already exists, if it does, drop it
 DROP TABLE IF EXISTS results;
 
--- Create artist table
+-- Create students table
 CREATE TABLE students (
     artist_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     last_name TEXT,
     first_name TEXT
 );
 
--- Create albums table
+-- Create albums quizes
 CREATE TABLE quizes (
     quiz_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     subject_name TEXT,
@@ -22,7 +22,7 @@ CREATE TABLE quizes (
     quiz_date DATE
 );
 
--- Create song table
+-- Create song results
 CREATE TABLE results (
     results_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     student_id INT NOT NULL,
