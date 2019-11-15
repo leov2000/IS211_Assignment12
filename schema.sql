@@ -1,23 +1,30 @@
--- hw13.db
+-- Check and see if the artists table already exists, if it does, drop it
+DROP TABLE IF EXISTS students;
 
--- Students:
--- firstname string 
--- lasname string
--- unique id 
+-- Check and see if the albums table already exists, if it does, drop it
+DROP TABLE IF EXISTS quizes;
 
--- Quizzes 
--- subject string 
--- questions int 
--- date day 
--- unique id 
+-- Check and see if the songs table already exists, if it does, drop it
+DROP TABLE IF EXISTS results;
 
+-- Create artist table
+CREATE TABLE students (
+    artist_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    last_name TEXT,
+    first_name TEXT
+);
 
--- Results 
--- student id 
--- quiz id 
--- result 
+-- Create albums table
+CREATE TABLE quizes (
+    quiz_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    subject_name TEXT,
+    questions TEXT,
+    quiz_date DATE
+);
 
--- INSERT
--- a student named “John Smith”
--- one quiz with a subject of “Python Basics”, that has 5 questions and was given on “February, 5th, 2015
--- and that “John Smith” received a 85 on the quiz
+-- Create song table
+CREATE TABLE results (
+    results_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    student_id INT NOT NULL,
+    quiz_id INT NOT NULL
+);
