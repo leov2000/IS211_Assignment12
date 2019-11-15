@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, request, session, abort, render_template_string
+from flask import Flask, flash, redirect, url_for, render_template, request, session, abort, render_template_string
 import random
 from utilities import get_credentials
 
@@ -11,7 +11,8 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html', cache_bust=random.random())
     else:
-        return render_template_string("Hi")
+        session.pop('_flashes', None)
+        return redirect(url_for('dashboard'))
 
 @app.route('/login', methods=['POST'])
 def admin_login():
@@ -32,6 +33,11 @@ def logout():
 
 @app.route('/dashboard')
 def dashboard():
+    if session.get('logged_in'):
+        return render_template('dashboard.html', cache_bust=random.random())
+    else:
+        flash('please login!')
+        return redirect(url_for('home'))
     """
     shows a listing of students i the class and a listing of quizzes
     in the class, in two separate tables. Each row of the student table should
@@ -40,8 +46,16 @@ def dashboard():
     ID, subject, number of questions and the quiz date.
     """
 
-@app.route('/student<id>')
-def get_student():
+@app.route('/student/<id>')
+def get_student(id):
+
+    print(id, 'here')
+    if session.get('logged_in'):
+        return render_template('student.html', cache_bust=random.random())
+    else:
+        flash('please login!')
+        return redirect(url_for('home'))
+
     """
     where id is the ID of the student. This route should display all quiz results for
     the student with the given ID. If there are no results, you shouldoutput “No Results’ to the page;
