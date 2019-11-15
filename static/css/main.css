@@ -47,7 +47,7 @@ a:hover {
 }
 
 .error-messages {
-    width: 60%;
+    width: 45%;
     display: flex;
     justify-content: flex-end;
     align-items:center;
@@ -100,4 +100,16 @@ input {
     width: 100%;
     background-color: black;
     color: white;
+}
+
+.signout-button-container {
+    width: 20%;
+    display: flex;
+}
+
+.signout-button {
+    background-color: black;
+    color: white;
+    margin-bottom: 0;
+    margin-top: 5px;
 }
