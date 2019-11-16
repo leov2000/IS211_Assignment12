@@ -31,7 +31,34 @@
                 </form>
             </div>
         </div>
+        <div class="content">
+            <div class="student-form-container">
+                <h5>Add a Student:</h3>
+                <div class="student-form">
+                    <form action="/student/add" method="POST">
+                        <span>First Name:</span>
+                        <input type="text" name="firstName" required>
+                        <span>Last Name:</span>
+                        <input type="text" name="lastName" required>
+                        <button class='submit-form-button'>Add Student</button>
+                    </form>
+                </div>
+            </div>
+            <div class="student-form-container">
+                    <h5>Add a Quiz:</h3>
+                    <div class="student-form">
+                        <form action="/quiz/add" method="POST">
+                            <span>Subject Name:</span>
+                            <input type="text" name="subjectName" required>
+                            <span>Questions #:</span>
+                            <input type="number" name="questionNum" required>
+                            <span>Quiz Date:</span>
+                            <input type="date" name="quizDate" required>
+                            <button class='submit-form-button'>Add Quiz</button>
+                        </form>
+                    </div>
+                </div>
+        </div>
     </div>
 </body>
 </html>
-    
