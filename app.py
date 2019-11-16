@@ -1,10 +1,12 @@
 from flask import Flask, flash, redirect, url_for, render_template, request, session, abort, render_template_string
 import random
-from utilities import get_credentials
+import sqlite3
+from utilities import get_credentials, pluck_student_keys, pluck_quiz_keys, insert_student, insert_quiz, query_quiz_all, query_student_all, get_results
 
 app = Flask(__name__)
 keys = get_credentials()
 app.secret_key = keys['secret_key']
+conn = sqlite3.connect('students.db', check_same_thread=False)
 
 @app.route('/login')
 def home():
@@ -34,22 +36,23 @@ def logout():
 @app.route('/dashboard')
 def dashboard():
     if session.get('logged_in'):
+        cursor = conn.cursor()
+        students_query = query_student_all()
+        quiz_query = query_quiz_all()
+        
+        student_results = get_results(cursor, students_query)
+        quiz_results = get_results(cursor, quiz_query)
+
+        print(quiz_results)
+        print(student_results)
+
         return render_template('dashboard.html', cache_bust=random.random())
     else:
         flash('please login!')
         return redirect(url_for('home'))
-    """
-    shows a listing of students i the class and a listing of quizzes
-    in the class, in two separate tables. Each row of the student table should
-    list the ID, first and last name of all student enrolled in this class.
-    Each row of the quiz table should list the
-    ID, subject, number of questions and the quiz date.
-    """
 
 @app.route('/student/<id>')
-def get_student(id):
-
-    print(id, 'here')
+def get_students(id):
     if session.get('logged_in'):
         return render_template('student.html', cache_bust=random.random())
     else:
@@ -64,21 +67,33 @@ def get_student(id):
 
 @app.route('/student/add', methods=['POST'])
 def add_student():
-    """
-    Display an HTML form capable of adding a new student (HINT: there should be no
-    reason to have an ID field in this form, as that should be taken care of by the database)
-    Accepts the HTML form and attempts to add a new student to the database with the given form
-    information. Upon success, redirect back to the ‘/dashboard’ route. If there is a failure,
-    return the same HTML form with an error message
-    """
+    if session.get('logged_in') and request.form:
+        form_values = request.form
+        dict_form_values = dict(form_values)
+        (first, last) = pluck_student_keys(dict_form_values)
+
+        cursor = conn.cursor()
+        sql_script = insert_student(first, last)
+        cursor.executescript(sql_script)
+
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('dashboard'))
 
 @app.route('/quiz/add', methods=['POST'])
 def add_quiz():
-    """"
-    We also need to be able to add quizzes. Repeat the prior step, but for a quiz instead of a student. This route
-    should be located at ‘/quiz/add’. Think about how best to represent a date using HTML forms, as you have a
-    few options.
-    """
+    if session.get('logged_in') and request.form:
+        form_values = request.form
+        dict_form_values = dict(form_values)
+        (subject, num, quiz_date) = pluck_quiz_keys(dict_form_values)
+
+        cursor = conn.cursor()
+        sql_script = insert_quiz(subject, num, quiz_date)
+        cursor.executescript(sql_script)
+
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('dashboard'))
 
 @app.route('/results/add', methods=['POST'])
 def add_quiz_result():
@@ -98,4 +113,5 @@ def add_quiz_result():
 #     """
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    app.run(debug=True)
