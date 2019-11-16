@@ -28,6 +28,12 @@ button, select, .btn {
     height: 100%;
     align-items: center;
     display: flex;
+    cursor: pointer;
+}
+
+.nav-heading a:link, .nav-heading a:visited, .nav-heading a:hover, .nav-heading a:active {
+    text-decoration: none;
+    color: black;
 }
 
 .error-messages {
@@ -102,7 +108,7 @@ input {
     width: 100%;
 }
 
-.student-form-container {
+.form-container {
     width: 100%;
     padding-top: 25px;
     padding-left: 20px;
@@ -114,9 +120,14 @@ input {
     margin-left: 15px;
 }
 
-.student-form {
+.form-inputs {
     display: flex;
     justify-content: flex-start;
+}
+
+.form-inputs select {
+    margin-left: 15px;
+    margin-right: 10px;
 }
 
 .student-table {
