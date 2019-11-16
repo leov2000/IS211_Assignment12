@@ -113,3 +113,24 @@ input {
     margin-bottom: 0;
     margin-top: 5px;
 }
+
+.content {
+    width: 100%;
+}
+
+.student-form-container {
+    width: 100%;
+    padding-top: 30px;
+}
+
+.submit-form-button {
+    background-color: black;
+    color: white;
+    margin-left: 15px;
+    /* padding-left: 20px; */
+}
+
+.student-form {
+    display: flex;
+    justify-content: flex-start;
+}
