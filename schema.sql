@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS results;
 
 -- Create students table
 CREATE TABLE students (
-    artist_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    student_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     last_name TEXT,
     first_name TEXT
 );
