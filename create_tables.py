@@ -11,7 +11,5 @@ def create_tables():
 
     sql_file.close()
 
-
-
 if __name__ == '__main__':
     create_tables()
