@@ -108,7 +108,19 @@ def get_quiz(id):
 @app.route('/results/add')
 def results_page():
     if session.get('logged_in'):
-        return render_template('student.html', cache_bust=random.random())
+        cursor = conn.cursor()
+        students_query = query_student_all()
+        quiz_query = query_quiz_all()
+        
+        student_results = get_results(cursor, students_query)
+        quiz_results = get_results(cursor, quiz_query)
+
+        student_values = merge_tuples_to_dict(config_student_keys(), student_results) if student_results else student_results
+        quiz_values = merge_tuples_to_dict(config_quiz_keys(), quiz_results) if quiz_results else quiz_results
+
+        print(student_values)
+        print(quiz_values)
+        return render_template('results.html', student_values=student_values, quiz_values=quiz_values, cache_bust=random.random())
     else:
         return redirect(url_for('dashboard'))
 
