@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, url_for, render_template, request, session, abort, render_template_string
 import random
 import sqlite3
-from utilities import get_credentials, pluck_student_keys, pluck_quiz_keys, insert_student, insert_quiz, query_quiz_all, query_student_all, get_results
+from utilities import get_credentials, pluck_student_keys, pluck_quiz_keys, insert_student, insert_quiz, query_quiz_all, query_student_all, get_results, config_quiz_keys, config_student_keys, merge_tuples_to_dict
 
 app = Flask(__name__)
 keys = get_credentials()
@@ -18,7 +18,6 @@ def home():
 
 @app.route('/login', methods=['POST'])
 def admin_login():
-
     if request.form['password'] == keys['password'] and keys['username'] == 'admin':
         session['logged_in'] = True
     else:
@@ -43,10 +42,13 @@ def dashboard():
         student_results = get_results(cursor, students_query)
         quiz_results = get_results(cursor, quiz_query)
 
-        print(quiz_results)
-        print(student_results)
+        student_values = merge_tuples_to_dict(config_student_keys(), student_results) if student_results else student_results
+        quiz_values = merge_tuples_to_dict(config_quiz_keys(), quiz_results) if quiz_results else quiz_results
 
-        return render_template('dashboard.html', cache_bust=random.random())
+        print(student_values)
+        print(quiz_values)
+
+        return render_template('dashboard.html', student_values=student_values, quiz_values=quiz_values, cache_bust=random.random())
     else:
         flash('please login!')
         return redirect(url_for('home'))
@@ -92,6 +94,21 @@ def add_quiz():
         cursor.executescript(sql_script)
 
         return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('dashboard'))
+
+@app.route('/quiz/<id>')
+def get_quiz(id):
+    if session.get('logged_in'):
+        return render_template('student.html', cache_bust=random.random())
+    else:
+        flash('please login!')
+        return redirect(url_for('home'))
+
+@app.route('/results/add')
+def results_page():
+    if session.get('logged_in'):
+        return render_template('student.html', cache_bust=random.random())
     else:
         return redirect(url_for('dashboard'))
 
