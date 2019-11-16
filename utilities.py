@@ -52,14 +52,12 @@ def get_results(cursor, query):
 
     return result 
 
-def student_keys():
-    # [(1, 'black', 'jack')]
+def config_student_keys():
     key_tuple = ('student_id', 'last_name', 'first_name')
 
     return key_tuple
 
-def quiz_keys():
-    # [(1, 'Rock', '100', '2019-11-05')]
+def config_quiz_keys():
     quiz_tuple = ('quiz_id', 'subject', 'quiz_num', 'quiz_date')
 
     return quiz_tuple
