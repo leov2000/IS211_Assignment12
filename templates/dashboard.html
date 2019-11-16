@@ -31,6 +31,9 @@
                 </form>
             </div>
         </div>
+        {% if student_values and quiz_values %}
+            <div class="add-result"><button><a href="/results/add"> Add Results</a></button></div>
+        {% endif %}
         <div class="content">
             <div class="student-form-container">
                 <h5>Add a Student:</h3>
@@ -57,7 +60,56 @@
                             <button class='submit-form-button'>Add Quiz</button>
                         </form>
                     </div>
+            </div>
+
+            {% if student_values %}
+            <div class="student-table">
+                <div>
+                    <h5>Registered Students:</h5>
                 </div>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>FIRST NAME</th>
+                        <th>LAST NAME</th>
+                        <th>STUDENT DETAILS</th>
+                    </tr>
+                    {% for student in student_values %}
+                    <tr>
+                        <td>{{ student.student_id }}</td>
+                        <td>{{ student.last_name }}</td>
+                        <td>{{ student.first_name }}</td>
+                        <td> <button><a href="student/{{student.student_id}}">View Student Details</a></button></td></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+            </div>
+            {% if quiz_values %}
+            <div class="student-table">
+                <div>
+                    <h5>Quizes:</h5>
+                </div>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>SUBJECT</th>
+                        <th># OF QUES.</th>
+                        <th>QUIZ DATE</th>
+                        <th>QUIZ DETAILS</th>
+                    </tr>
+                    {% for quiz in quiz_values %}
+                    <tr>
+                        <td>{{ quiz.quiz_id }}</td>
+                        <td>{{ quiz.subject }}</td>
+                        <td>{{ quiz.quiz_num }}</td>
+                        <td>{{ quiz.quiz_date }}</td>
+                        <td> <button><a href="quiz/{{quiz.quiz_id}}">View Quiz Details</a></button></td></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+            </div>
         </div>
     </div>
 </body>
