@@ -35,9 +35,9 @@
             <div class="add-result"><button><a href="/results/add"> Add Results</a></button></div>
         {% endif %}
         <div class="content">
-            <div class="student-form-container">
+            <div class="form-container">
                 <h5>Add a Student:</h3>
-                <div class="student-form">
+                <div class="form-inputs">
                     <form action="/student/add" method="POST">
                         <span>First Name:</span>
                         <input type="text" name="firstName" required>
@@ -47,9 +47,9 @@
                     </form>
                 </div>
             </div>
-            <div class="student-form-container">
+            <div class="form-container">
                     <h5>Add a Quiz:</h3>
-                    <div class="student-form">
+                    <div class="form-inputs">
                         <form action="/quiz/add" method="POST">
                             <span>Subject Name:</span>
                             <input type="text" name="subjectName" required>
