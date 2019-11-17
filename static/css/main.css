@@ -144,9 +144,7 @@ input {
 }
 
 .student-table tr:hover {
-    background: lightgrey;
-    cursor: pointer;
-    
+    background: lightgrey;    
 }
 
 .student-table button {
@@ -170,9 +168,3 @@ input {
     font-weight: 1000;
     font-size: 14px;
 }
-
-
-/* .student-table, td:first-child {
-    padding-left: 12px 15px !important;
-    text-align: left;
-} */
