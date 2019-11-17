@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, url_for, render_template, request, session, abort, render_template_string
 import random
 import sqlite3
-from utilities import get_credentials, pluck_student_keys, pluck_quiz_keys, insert_student, insert_quiz, query_quiz_all, query_student_all, get_results, config_quiz_keys, config_student_keys, merge_tuples_to_dict
+from utilities import get_credentials, pluck_student_keys, pluck_quiz_keys, insert_student, insert_quiz, query_quiz_all, query_student_all, get_results, config_quiz_keys, config_student_keys, merge_tuples_to_dict, pluck_result_keys, insert_results, find_student_quizes, config_results_keys, find_quizes_with_students, config_anon_view_keys
 
 app = Flask(__name__)
 keys = get_credentials()
@@ -45,9 +45,6 @@ def dashboard():
         student_values = merge_tuples_to_dict(config_student_keys(), student_results) if student_results else student_results
         quiz_values = merge_tuples_to_dict(config_quiz_keys(), quiz_results) if quiz_results else quiz_results
 
-        print(student_values)
-        print(quiz_values)
-
         return render_template('dashboard.html', student_values=student_values, quiz_values=quiz_values, cache_bust=random.random())
     else:
         flash('please login!')
@@ -56,16 +53,15 @@ def dashboard():
 @app.route('/student/<id>')
 def get_students(id):
     if session.get('logged_in'):
-        return render_template('student.html', cache_bust=random.random())
+        cursor = conn.cursor()
+        result_query = find_student_quizes(id)
+        details_results = get_results(cursor, result_query)
+        details_values = merge_tuples_to_dict(config_results_keys(), details_results) if details_results else details_results
+
+        return render_template('student.html', details_values=details_values, cache_bust=random.random())
     else:
         flash('please login!')
         return redirect(url_for('home'))
-
-    """
-    where id is the ID of the student. This route should display all quiz results for
-    the student with the given ID. If there are no results, you shouldoutput “No Results’ to the page;
-    otherwise, an HTML table should be displayed showing the Quiz ID and theScore on the quiz.
-    """
 
 @app.route('/student/add', methods=['POST'])
 def add_student():
@@ -97,13 +93,19 @@ def add_quiz():
     else:
         return redirect(url_for('dashboard'))
 
-@app.route('/quiz/<id>')
+@app.route('/quiz/<id>/results/')
 def get_quiz(id):
-    if session.get('logged_in'):
-        return render_template('student.html', cache_bust=random.random())
-    else:
-        flash('please login!')
-        return redirect(url_for('home'))
+    cursor = conn.cursor()
+    anon_query = find_quizes_with_students(id)
+
+    anon_results = get_results(cursor, anon_query)
+    anon_values = merge_tuples_to_dict(config_anon_view_keys(), anon_results) if anon_results else anon_results
+
+    print(anon_results)
+    print(anon_values)
+
+    return render_template('quiz-detail.html', anon_values=anon_values, cache_bust=random.random())
+
 
 @app.route('/results/add')
 def results_page():
@@ -118,29 +120,21 @@ def results_page():
         student_values = merge_tuples_to_dict(config_student_keys(), student_results) if student_results else student_results
         quiz_values = merge_tuples_to_dict(config_quiz_keys(), quiz_results) if quiz_results else quiz_results
 
-        print(student_values)
-        print(quiz_values)
         return render_template('results.html', student_values=student_values, quiz_values=quiz_values, cache_bust=random.random())
     else:
         return redirect(url_for('dashboard'))
 
 @app.route('/results/add', methods=['POST'])
 def add_quiz_result():
-    """
-    This route should display an HTML form capable of adding a quiz result. Since a result
-    links a student and a quiz together, we need to be able to select a student and to select a quiz.
-    Implement both of these as a dropdown menu, which lists the possible students and quizzes to choose from.
-    Don’t forget to add an input field for the grade as well. If successful, this should redirect to the dashboard;
-    if there is a failure, show the HTML form again with an error message.
-    """
+    form_values = request.form
+    dict_form_values = dict(form_values)
+    (student_id, quiz_id, grade) = pluck_result_keys(dict_form_values)
 
-# @app.route('/results')
-# def view_results():
-#     """
-#     Allow a non­logged in user to see quiz results but only in a anonymized way
-#     (i.e. show a student ID instead of the user name)
-#     """
+    cursor = conn.cursor()
+    sql_script = insert_results(student_id, quiz_id, grade)
+    cursor.executescript(sql_script)
+
+    return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
-    # app.run()
     app.run(debug=True)
