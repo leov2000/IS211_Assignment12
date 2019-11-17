@@ -96,7 +96,6 @@
                         <th>SUBJECT</th>
                         <th># OF QUES.</th>
                         <th>QUIZ DATE</th>
-                        <th>QUIZ DETAILS</th>
                     </tr>
                     {% for quiz in quiz_values %}
                     <tr>
@@ -104,7 +103,6 @@
                         <td>{{ quiz.subject }}</td>
                         <td>{{ quiz.quiz_num }}</td>
                         <td>{{ quiz.quiz_date }}</td>
-                        <td> <button><a href="quiz/{{quiz.quiz_id}}">View Quiz Details</a></button></td></td>
                     </tr>
                     {% endfor %}
                 </table>
