@@ -62,11 +62,43 @@ def config_quiz_keys():
 
     return quiz_tuple
 
+def config_results_keys():
+    results_tuple = ('first_name', 'last_name', 'subject', 'quiz_id', 'quiz_date', 'score')
+
+    return results_tuple
+
 def merge_tuples_to_dict(key_tup, val_tup_list):
     result_list = [dict(zip(key_tup, val_tup)) for val_tup in val_tup_list]
 
     return result_list
 
+def pluck_result_keys(form_dict):
+    student_id = int(form_dict['student'])
+    quiz_id = int(form_dict['quiz'])
+    grade = int(form_dict['grade'])
 
+    return (student_id, quiz_id, grade)
 
+def insert_results(student, quiz, grade):
+    sql_insert = f"""
+    INSERT INTO results
+    (student_id, quiz_id, grade)
+    VALUES('{student}', '{quiz}', '{grade}');
+    """
+    return sql_insert
 
+def find_student_quizes(id):
+    sql_query = f"""
+    SELECT 
+    students.first_name AS 'PersonFirst',
+    students.last_name AS 'PersonLast', 
+	quizes.subject_name AS 'quizSubject',
+    quizes.quiz_id AS 'quizId',
+    quizes.quiz_date as 'quizDate',
+    results.grade AS 'resultsScore'
+    FROM students
+	JOIN results ON students.student_id = results.student_id
+    JOIN quizes ON results.quiz_id = quizes.quiz_id
+    WHERE students.student_id IS {id};
+    """
+    return sql_query
