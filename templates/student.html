@@ -31,7 +31,32 @@
                 </form>
             </div>
         </div>
+        {% if details_values %}
+        <div class="student-table">
+            <div>
+                <h5>{{ details_values[0]['first_name'].capitalize() + " " + details_values[0]['last_name'].capitalize() }}</h5>
+            </div>
+            <table>
+                <tr>
+                    <th>QUIZ ID</th>
+                    <th>QUIZ SUBJECT</th>
+                    <th>QUIZ SCORE</th>
+                    <th>QUIZ DATE</th>
+                </tr>
+                {% for details in details_values %}
+                <tr>
+                    <td>{{ details.quiz_id }}</td>
+                    <td>{{ details.subject }}</td>
+                    <td>{{ details.score }}</td>
+                    <td>{{ details.quiz_date}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <div class="student-table"><h5>No Results</h5></div>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>
-    
+
