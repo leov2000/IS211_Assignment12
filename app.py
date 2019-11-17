@@ -8,6 +8,10 @@ keys = get_credentials()
 app.secret_key = keys['secret_key']
 conn = sqlite3.connect('students.db', check_same_thread=False)
 
+@app.route('/')
+def root():
+    return redirect(url_for('home'))
+
 @app.route('/login')
 def home():
     if not session.get('logged_in'):
@@ -100,9 +104,6 @@ def get_quiz(id):
 
     anon_results = get_results(cursor, anon_query)
     anon_values = merge_tuples_to_dict(config_anon_view_keys(), anon_results) if anon_results else anon_results
-
-    print(anon_results)
-    print(anon_values)
 
     return render_template('quiz-detail.html', anon_values=anon_values, cache_bust=random.random())
 
