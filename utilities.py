@@ -67,6 +67,11 @@ def config_results_keys():
 
     return results_tuple
 
+def config_anon_view_keys():
+    results_tuple = ('person_id', 'subject', 'quiz_id', 'quiz_date', 'score')
+
+    return results_tuple
+
 def merge_tuples_to_dict(key_tup, val_tup_list):
     result_list = [dict(zip(key_tup, val_tup)) for val_tup in val_tup_list]
 
@@ -100,5 +105,20 @@ def find_student_quizes(id):
 	JOIN results ON students.student_id = results.student_id
     JOIN quizes ON results.quiz_id = quizes.quiz_id
     WHERE students.student_id IS {id};
+    """
+    return sql_query
+
+def find_quizes_with_students(id):
+    sql_query = f"""
+    SELECT 
+    students.student_id AS 'personId',
+	quizes.subject_name AS 'quizSubject',
+    quizes.quiz_id AS 'quizId',
+    quizes.quiz_date as 'quizDate',
+    results.grade AS 'resultsScore'
+    FROM students
+	JOIN results ON students.student_id = results.student_id
+    JOIN quizes ON results.quiz_id = quizes.quiz_id
+    WHERE quizes.quiz_id IS {id};
     """
     return sql_query
