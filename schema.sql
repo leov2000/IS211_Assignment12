@@ -26,5 +26,6 @@ CREATE TABLE quizes (
 CREATE TABLE results (
     results_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     student_id INT NOT NULL,
-    quiz_id INT NOT NULL
+    quiz_id INT NOT NULL,
+    grade INT NOT NULL
 );
