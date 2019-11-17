@@ -36,7 +36,7 @@
         {% endif %}
         <div class="content">
             <div class="form-container">
-                <h5>Add a Student:</h3>
+                <h5 title="Must have at least 1 Student and 1 Quiz in order to add a Result.">Add a Student:</h3>
                 <div class="form-inputs">
                     <form action="/student/add" method="POST">
                         <span>First Name:</span>
@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="form-container">
-                    <h5>Add a Quiz:</h3>
+                    <h5 title="Must have at least 1 Student and 1 Quiz in order to add a Result.">Add a Quiz:</h3>
                     <div class="form-inputs">
                         <form action="/quiz/add" method="POST">
                             <span>Subject Name:</span>
